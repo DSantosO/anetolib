@@ -1,0 +1,162 @@
+/**
+ *******************************************************************************************************
+ *******************************************************************************************************
+ * ANETO Library README
+ *******************************************************************************************************
+ *
+ *******************************************************************************************************
+ * The ANETO Library
+ *
+ * Project homepage: https://github.com/DSantosO/anetolib
+ * Copyright (c) 2017 Daniel Santos-Olivan and Carlos F. Sopuerta
+ * ANETO is under GNU General Public License ("GPL").
+ *
+ * The ANETO (Arbitrary precisioN solvEr with pseudo-specTral methOds) library's
+ * main purpose is to provide a tool to perform simple one-dimensional problems
+ * or evolution ones with the Method of lines with Arbitrary Precision using
+ * Pseudo-Spectral Collocation methods (PSC).
+ *
+ * The exponential convergence of spectral methods makes them the best option to go beyond
+ * the standard double precision (64-bits).
+ * For this precision, maximum accuracy is usually reached with a very low number of
+ * discretization points so it is not that computational expensive to go further.
+ *
+ * The classes implemented here can be used with arbitrary data types allowing us to
+ * control the accuracy of our numerical computations until the level we need / can
+ * computationally afford.
+ *
+ * A paper with a basic review of PSC methods and showing some of the possibilities
+ * of the library will be published soon.
+ *
+ *
+ *******************************************************************************************************
+ * Using the Library
+ *
+ * All the functionalities of this library are implemented as template classes in the
+ * header files included in the folder aneto/ so in order to be used in
+ * your program is enough to tell the compiler to included this folder or
+ * to copy them into an existing include folder.
+ * The ANETO library need the standard C++ library and the
+ * Eigen3 library for Linear Algebra that can be downloaded from
+ * http://eigen.tuxfamily.org/
+ *
+ *
+ *******************************************************************************************************
+ * Quick Test
+ *
+ * For a quick test of the library, the script tests.sh can be used.
+ * Just:
+		./tests-sh build
+		./tests-sh run
+ *
+ * If any of the previous fails, check the next section for a full option building.
+ *
+ *
+ *******************************************************************************************************
+ * Full Test
+ *
+ * The current library includes some tests that can be execute in order to
+ * check the correct behaviour of the library or to be used as an use examples.
+ * The first thing is to compile the test executable. Located in the ANETO folder, this can be done as:
+ *
+		cd build/
+		cmake ../.
+		make tests
+ *
+ * The examples use standard types and MPFR C++ a wrapp-up created by
+ * Pavel Holoborodko (http://www.holoborodko.com/pavel/mpfr/).
+ * MPFR C++ is included with the examples but GNU's MPFR library (http://www.mpfr.org) is needed.
+ * This should be available in the repositories of most GNU/Linux distributions and can be also downloaded from its website.
+ * If it is not available an error will show it during the cmake building process.
+ * Boost C++ libraries (http://www.boost.org) are also used and need to be installed.
+ * If any of the boost modules needed are not available an error will show it during the cmake building process.
+ * The test also check some of the functions with the non-standard quadruple precision 'quadmath'.
+ * The use of this library can be disable by adding '-DQUAD=OFF' as an cmake argument.
+ *
+ * Once the tests are compiled they can check most of the functions of the library and can
+ * be executed just by:
+ *
+		./tests
+ *
+ * For a complete output of the tests the verbose option '-v' can be enabled.
+ * This option will generate files for some of the tests.
+ *
+ * If a single test is wanted it also can be executed with the option 't'.
+ * The following are available:
+ *
+		./tests -t singledom_derivatives
+		./tests -t singledom_integral_comparison
+		./tests -t singledom_integral_LR
+		./tests -t multidom_derivative_dual
+		./tests -t multidom_integral_comparison
+		./tests -t multidom_integral_LR
+		./tests -t root_finding
+		./tests -t interpolation
+ *
+ * Also, only singledomain or multidomain test can be executed by:
+		./tests -t singledom
+		./tests -t multidom
+
+ *
+ * Aside from the predefined one, the user can also change the number of domains/points for checking
+ * different grid configuration. '-D' change the domains '-N' change the points per domain and
+ * '-S' change the points for single domain tests. In some tests, the user can also change the digits
+ * precision with '-p'. All of this options only will be visible in the verbose mode and will not
+ * impact in the default checks.
+ *
+ *
+ *******************************************************************************************************
+ * OpenMP Support
+ *
+ * The parallel support via OpenMP (http://www.openmp.org/) is yet experimental.
+ * Now it is available in the multidomain for the integral and normal derivative but
+ * it is not assured a perfect behaviour.
+ * If it present any problem or one just one to execute the library sequencially
+ * it can be compiled without OpenMP adding -DOMP=OFF in the test cmake or adding directly -DOMP=0
+ * as compilation option.
+ *
+ *
+ *******************************************************************************************************
+ * Documentation
+ *
+ * The manual in pdf can be found in the doc/ folder.
+
+ * The documentation of ANETO library can be generated by the script
+ *           ./documentation
+ *
+ * For a proper compilation, it needs Doxygen generator (www.doxygen.org).
+ * By default, a HTML version and a LaTeX pdf will be generated, so \b pdflatex
+ * and the proper packages needs to be installed.
+ *
+ * Doxygen options can be changed in the configuration file 'Doxfile'.
+ *
+ *
+ *******************************************************************************************************
+ * Licence
+ *
+ *  ANETO C++ Library - Arbitrary precisioN solvEr with pseudo-specTral MethOds
+ *  Project homepage: https://github.com/DSantosO/anetolib
+ *  Copyright (c) 2017 Daniel Santos-Olivan and Carlos F. Sopuerta
+ *
+ *  ANETO is under GNU General Public License ("GPL").
+ *
+ *  GNU General Public License ("GPL") copyright permissions statement:
+ *  This file is part of ANETO
+ *
+ *  ANETO is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  ANETO is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *******************************************************************************************************
+ */
+
