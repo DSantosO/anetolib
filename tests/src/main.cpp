@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	po::options_description desc("ANETO lib Tests");
 	desc.add_options()
 		("help,h", "Show this help")
-		("verbose, v", "Print all the information about the tests.")
+		("verbose,v", "Print all the information about the tests.")
  		("test,t", po::value<std::string>(&test)->default_value("all"), "Type of test to execute")
 		("spec_point,S", po::value<size_t>(&spec_points)->default_value(240), "Number of Points for the single domain tests")
 		("dom_number,D", po::value<size_t>(&dom_number)->default_value(14), "Number of Domains")
@@ -72,8 +72,8 @@ int main(int argc, char **argv)
 
 	if (vm.count("verbose"))
 		verbose = true;
-
-
+	else
+		verbose = false;
 
 	if (test == "all") {
 		TOT_ERROR += multidom_derivative_dual(verbose, dom_number, dom_points);
