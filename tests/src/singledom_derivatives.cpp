@@ -31,6 +31,12 @@
 #if QUAD == 1
 	#include <boost/multiprecision/float128.hpp>
 #endif
+#if QD == 1
+	#include <qd/fpu.h>
+	#include <qd/dd_real.h>
+	#include <qd/qd_real.h>
+#endif
+
 #include "tests/include/mpreal.h"
 
 #include "aneto/spectral_domain.hpp"
@@ -92,6 +98,10 @@ int singledom_derivatives(bool verbose, size_t spec_points)
 		check_error_derivative<long double>(verbose, spec_points, "#longdo  016");
 		#if QUAD == 1
 			check_error_derivative<boost::multiprecision::float128>(verbose, spec_points, "#quad    034");
+		#endif
+		#if QD == 1
+			check_error_derivative<dd_real>(verbose, spec_points, "#dd_real 032");
+			check_error_derivative<qd_real>(verbose, spec_points, "#qd_real 064");
 		#endif
 
 

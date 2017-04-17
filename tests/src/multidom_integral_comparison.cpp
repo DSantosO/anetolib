@@ -32,6 +32,13 @@
 #if QUAD == 1
 	#include <boost/multiprecision/float128.hpp>
 #endif
+#if QD == 1
+	#include <qd/fpu.h>
+	#include <qd/dd_real.h>
+	#include <qd/qd_real.h>
+#endif
+
+
 #include "tests/include/mpreal.h"
 
 #include "aneto/multidomain.hpp"
@@ -88,6 +95,10 @@ int multidom_integral_comparison(bool verbose, size_t spec_domains = 14, size_t 
 		check_error_integral<long double>(verbose, spec_domains, spec_points, "#longdo  016");
 		#if QUAD == 1
 			check_error_integral<boost::multiprecision::float128>(verbose, spec_domains, spec_points, "#quad    034");
+		#endif
+		#if QD == 1
+			check_error_integral<dd_real>(verbose, spec_domains, spec_points, "#dd_real 032");
+			check_error_integral<qd_real>(verbose, spec_domains, spec_points, "#qd_real 064");
 		#endif
 
 		for (size_t bit_prec = 5; bit_prec <= 500; bit_prec+=15) {

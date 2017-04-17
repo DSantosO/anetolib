@@ -29,13 +29,22 @@
 #include <boost/format.hpp>
 #include <chrono>
 
+
 #if QUAD == 1
 	#include <boost/multiprecision/float128.hpp>
 #endif
-#include "tests/include/mpreal.h"
+#if QD == 1
+	#include <qd/fpu.h>
+	#include <qd/dd_real.h>
+	#include <qd/qd_real.h>
+#endif
 
+
+#include "tests/include/mpreal.h"
 #include "aneto/spectral_domain.hpp"
-#include <tests/include/auxiliars.hpp>
+#include "tests/include/auxiliars.hpp"
+
+
 
 
 template<typename T> static T check_error_integral (bool verbose, size_t spec_points, std::string start_str)
@@ -90,6 +99,10 @@ int singledom_integral_comparison(bool verbose, size_t spec_points)
 		check_error_integral<long double>(verbose, spec_points, "#longdo  016");
 		#if QUAD == 1
 			check_error_integral<boost::multiprecision::float128>(verbose, spec_points, "#quad    034");
+		#endif
+		#if QD == 1
+			check_error_integral<dd_real>(verbose, spec_points, "#dd_real 032");
+			check_error_integral<qd_real>(verbose, spec_points, "#qd_real 064");
 		#endif
 
 		for (size_t dec_prec = 5; dec_prec <= 120; dec_prec+=5) {
