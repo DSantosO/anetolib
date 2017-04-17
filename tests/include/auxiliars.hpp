@@ -47,12 +47,12 @@ template<typename T> T cabs(T x)
 		return -x;
 }
 
-template<typename T> T compute_max_error(T *num, T *theo, size_t points, size_t first = 0)
+template<typename T> T compute_max_error(T *num, T *theo, unsigned int points, unsigned int first = 0)
 {
 	T temp;
 	T max_err = 0;
 
-	for(size_t i = first; i < points; i++) {
+	for(unsigned int i = first; i < points; i++) {
 		temp = cabs(num[i] - theo[i]);
 
 		if (temp > max_err)
@@ -106,7 +106,6 @@ static inline std::string toString_5e(boost::multiprecision::mpf_float number)
 	return number.str();
 }
 
-
 static inline std::string toString_f(float number)
 {
 	return (boost::format("%+.3f") % number).str();
@@ -147,6 +146,34 @@ static inline std::string toString_f(boost::multiprecision::mpf_float number)
 	}
 
 #endif
+
+#if QD == 1
+	#include <qd/fpu.h>
+	#include <qd/dd_real.h>
+	#include <qd/qd_real.h>
+
+	static inline std::string toString_5e(dd_real number)
+	{
+		return number.to_string(5);
+	}
+	static inline std::string toString_5e(qd_real number)
+	{
+		return number.to_string(5);
+	}
+
+	static inline std::string toString(dd_real number)
+	{
+		return number.to_string(32);
+	}
+	static inline std::string toString(qd_real number)
+	{
+		return number.to_string(64);
+	}
+#endif
+
+
+
+
 
 
 
