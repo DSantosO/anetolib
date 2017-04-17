@@ -52,6 +52,26 @@ else()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOMP=0")
 endif()
 
+option(QD "Compile with double-double (DD) and quad-double (QD) precision." ON)
+if (QD)
+	find_library(LIB_LOCATION libqd.a)
+	if (${LIB_LOCATION} MATCHES "LIB_LOCATION-NOTFOUND")
+		message(STATUS "QD library has not been found and it has been disable. Please check it.")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQD=0")
+	else()
+		message(STATUS "DD and QD are enable. If you have any problem run cmake with '-DQD=OFF' option.")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQD=1")
+		set(QD_FOUND ON)
+	endif()
+else()
+	message(STATUS "OpenMP is disable and it will not be tested.")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQD=0")
+endif()
+
+
+
+
+
 
 # Doxygen doc compilation - Use with 'make doc'
 find_package(Doxygen)
@@ -68,4 +88,9 @@ endif(DOXYGEN_FOUND)
 # Build tests
 file(GLOB TESTS_SRC  "tests/src/*.cpp")
 add_executable(tests ${TESTS_SRC})
+
+# FOR QD Compilation
+if (QD_FOUND)
+	target_link_libraries(tests ${LIB_LOCATION})
+endif()
 
