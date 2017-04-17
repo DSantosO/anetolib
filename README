@@ -72,6 +72,10 @@
  * If any of the boost modules needed are not available an error will show it during the cmake building process.
  * The test also check some of the functions with the non-standard quadruple precision 'quadmath'.
  * The use of this library can be disable by adding '-DQUAD=OFF' as an cmake argument.
+ * In addition, some functions are also checked with the QD library types dd_real (32 digits) and qd_real (64 digits).
+ * The headers and the static library needs to be installed in a folder available for the compiler. The library can
+ * be downloaded at http://crd-legacy.lbl.gov/~dhbailey/mpdist/.
+ * The use of this library can be disable by adding '-DQD=OFF' as an cmake argument.
  *
  * Once the tests are compiled they can check most of the functions of the library and can
  * be executed just by:
