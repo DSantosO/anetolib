@@ -96,7 +96,9 @@ template <typename T> int check_interpolation(bool verbose, size_t spec_points, 
 	delete[] r_spec;
 	delete[] r_mult;
 
-	if (error_fun < pow((T)10.00, exp_error_f) && cabs(der_spec - der_x) < pow((T)10.00, exp_error_d) && cabs(dv2_spec - dv2_x) < pow((T)10.00, exp_error_d2)) {
+	if ((error_fun < pow((T)10.00, (T)exp_error_f)) &&
+		(cabs(der_spec - der_x) < pow((T)10.00, (T)exp_error_d)) &&
+		(cabs(dv2_spec - dv2_x) < pow((T)10.00, (T)exp_error_d2))) {
 		if (verbose) std::clog << "OK!" << std::endl;
 		return 0;
 	}
