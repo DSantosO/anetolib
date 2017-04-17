@@ -822,7 +822,7 @@ namespace aneto {
 			m_dom_end = new int[m_num_threads];
 
 			for (int i = 0; i < m_num_threads; i++)
-				m_dom_beg[i] = i * std::ceil( ((T)m_domain_number)/m_num_threads);
+				m_dom_beg[i] = i * ( 1 + ((m_domain_number - 1) / m_num_threads) ); // i * ceil (m_domain_number / m_num_threads)
 
 			for (int i = 0; i <= (m_num_threads-2); i++)
 				m_dom_end[i] = m_dom_beg[i+1] - 1;
