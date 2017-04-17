@@ -106,7 +106,7 @@ namespace aneto {
 
 
 		/* OpenMP Variables */
-		size_t m_num_threads;
+		int m_num_threads;
 
 
 		T *m_offset;
@@ -130,10 +130,10 @@ namespace aneto {
 		T m_two;
 		T m_half;
 
-		size_t m_total_points;
+		int m_total_points;
 				// total points
-		size_t m_domain_points;						// points per domain
-		size_t m_domain_number;						// total domains
+		int m_domain_points;						// points per domain
+		int m_domain_number;						// total domains
 
 		T *m_dom_nodes;
 		T *m_aux1;
@@ -141,8 +141,8 @@ namespace aneto {
 
 		spectral_domain<T> *m_lobGrid;
 	///< Grid for a single domain.
-		size_t *m_dom_beg;
-		size_t *m_dom_end;
+		int *m_dom_beg;
+		int *m_dom_end;
 
 	public:
 
@@ -175,8 +175,8 @@ namespace aneto {
 		 *                        If the boundaries are not ordered correctly the run will be aborted.
 		 *                        Can be left empty or passing a NULL points if it is not needed.
 		 */
-		multidomain(size_t p_domain_number, size_t p_domain_points, T left_bndry = 0,
-					T right_bndry = +1, size_t number_threads = +1,
+		multidomain(int p_domain_number, int p_domain_points, T left_bndry = 0,
+					T right_bndry = +1, int number_threads = +1,
 					DERGRID_OPTION dergrid_option = DERGRID_OPTION::SINGLE,
 					GRID_OPTION grid_option = GRID_OPTION::UNIFORM, T *boundaries = NULL) {
 
@@ -205,8 +205,8 @@ namespace aneto {
 		 *                        If the boundaries are not ordered correctly the run will be aborted.
 		 *                        Can be left empty or passing a NULL points if it is not needed.
 		 */
-		void initialise(size_t p_domain_number, size_t p_domain_points, T left_bndry = 0,
-						T right_bndry = +1, size_t number_threads = +1,
+		void initialise(int p_domain_number, int p_domain_points, T left_bndry = 0,
+						T right_bndry = +1, int number_threads = +1,
 						DERGRID_OPTION dergrid_option = DERGRID_OPTION::SINGLE,
 						GRID_OPTION grid_option = GRID_OPTION::UNIFORM, T *boundaries = NULL) {
 
@@ -276,7 +276,7 @@ namespace aneto {
 		 * total = domain_number * (domain_points + 1);
 		 *
 		 */
-		inline size_t number_points() const
+		inline int number_points() const
 		{
 			return m_total_points;
 		}
@@ -285,7 +285,7 @@ namespace aneto {
 		 * Returns the number of points per domain.
 		 *
 		 */
-		inline size_t dom_points() const
+		inline int dom_points() const
 		{
 			return m_domain_points;
 		}
@@ -294,7 +294,7 @@ namespace aneto {
 		 * Returns the number of domains.
 		 *
 		 */
-		inline size_t dom_number() const
+		inline int dom_number() const
 		{
 			return m_domain_number;
 		}
@@ -303,7 +303,7 @@ namespace aneto {
 		 * Returns the value of the multidomain coordinate in the collocation point i.
 		 * \param i the global index
 		 */
-		inline T xp(size_t i) const
+		inline T xp(int i) const
 		{
 			return m_main_xp[i];
 		}
@@ -313,7 +313,7 @@ namespace aneto {
 		 * \param dom the domain
 		 * \param k the index in the domain
 		 */
-		inline T xp(size_t dom, size_t k) const
+		inline T xp(int dom, int k) const
 		{
 			return m_main_xp[get_id(dom,k)];
 		}
@@ -322,7 +322,7 @@ namespace aneto {
 		 * Returns the value of the multidomain jacobian in the point k fo the domain dom.
 		 * \param i the global index
 		 */
-		inline T dxp_dX(size_t i) const
+		inline T dxp_dX(int i) const
 		{
 			return m_main_dxp_dX[i];
 		}
@@ -332,7 +332,7 @@ namespace aneto {
 		 * \param dom the domain
 		 * \param k the index in the domain
 		 */
-		inline T dxp_dX(size_t dom, size_t k) const
+		inline T dxp_dX(int dom, int k) const
 		{
 			return m_main_dxp_dX[get_id(dom,k)];
 		}
@@ -341,7 +341,7 @@ namespace aneto {
 		 * Returns the value of the multidomain jacobian (inverse) in the point k fo the domain dom.
 		 * \param i the global index
 		 */
-		inline T dX_dxp(size_t i) const
+		inline T dX_dxp(int i) const
 		{
 			return m_main_dX_dxp[i];
 		}
@@ -351,7 +351,7 @@ namespace aneto {
 		 * \param dom the domain
 		 * \param k the index in the domain
 		 */
-		inline T dX_dxp(size_t dom, size_t k) const
+		inline T dX_dxp(int dom, int k) const
 		{
 			return m_main_dX_dxp[get_id(dom,k)];
 		}
@@ -361,7 +361,7 @@ namespace aneto {
 		 * Returns the left boundary of a domain.
 		 * \param dom the domain
 		 */
-		inline T get_l_bndry(size_t dom) const
+		inline T get_l_bndry(int dom) const
 		{
 			return m_dom_nodes[dom];
 		}
@@ -371,7 +371,7 @@ namespace aneto {
 		 * \param dom the domain
 		 *
 		 */
-		inline T get_r_bndry(size_t dom)
+		inline T get_r_bndry(int dom)
 		{
 			return m_dom_nodes[dom+1];
 		}
@@ -398,7 +398,7 @@ namespace aneto {
 		 * \param dom  the domain
 		 * \param poin the point
 		 */
-		inline size_t get_id (const size_t dom, const size_t poin) const
+		inline int get_id (const int dom, const int poin) const
 		{
 			return dom * (m_domain_points + 1) + poin;
 		}
@@ -408,7 +408,7 @@ namespace aneto {
 		 * The input is not checked.
 		 * \param id index of the array.
 		 */
-		inline size_t get_dom(const size_t id) const
+		inline int get_dom(const int id) const
 		{
 			return id / (m_domain_points + 1);
 		}
@@ -418,7 +418,7 @@ namespace aneto {
 		 * The input is not checked.
 		 * \param id index of the array.
 		 */
-		inline size_t get_point(const size_t id) const
+		inline int get_point(const int id) const
 		{
 			return id - get_dom(id) * (m_domain_points + 1);
 		}
@@ -429,7 +429,7 @@ namespace aneto {
 		 * \param dom  the domain
 		 * \param poin the point
 		 */
-		inline T* get_pointer_dom (T *pointer_a0, size_t dom)
+		inline T* get_pointer_dom (T *pointer_a0, int dom)
 		{
 			return &(pointer_a0[get_id(dom, 0)]);
 		}
@@ -439,9 +439,9 @@ namespace aneto {
 		 * The method will fail if the given coordinate is outside the grid.
 		 * \param x_i coordinate of the grid.
 		 */
-		inline size_t get_dom_coord(T x_i) const
+		inline int get_dom_coord(T x_i) const
 		{
-			size_t i_minu, i_plus, i_midd;
+			int i_minu, i_plus, i_midd;
 
 			i_minu = 0;
 			i_plus = m_domain_number;
@@ -475,7 +475,7 @@ namespace aneto {
 		 * \param x_i coordinate of the grid.
 		 */
 		inline T get_X(T x_i) {
-			size_t dom = get_dom_coord(x_i);
+			int dom = get_dom_coord(x_i);
 
 			return (m_two * x_i - (m_dom_nodes[dom] + m_dom_nodes[dom+1]) )/(m_dom_nodes[dom+1] - m_dom_nodes[dom]);
 		}
@@ -485,7 +485,7 @@ namespace aneto {
 		 * \param dom Domain we are interested in.
 		 * \param X   Spectral coordinate.
 		 */
-		inline T get_xp(size_t dom, T X) {
+		inline T get_xp(int dom, T X) {
 			return m_half * ((m_dom_nodes[dom] + m_dom_nodes[dom+1]) + (m_dom_nodes[dom+1] - m_dom_nodes[dom]) * X);
 		}
 
@@ -502,7 +502,7 @@ namespace aneto {
 		 */
 		T interpolate(T *function, T x_value, bool use_spec_stored = false)
 		{
-			size_t dom = get_dom_coord(x_value);
+			int dom = get_dom_coord(x_value);
 			T spec_X = get_X(x_value);
 
 			if (use_spec_stored)
@@ -529,7 +529,7 @@ namespace aneto {
 		 */
 		T root_finder_increasing(T f_xr, T *func)
 		{
-			size_t dom_value;
+			int dom_value;
 
 			/* Check if value is in a valid range */
 			if (f_xr < func[0]) {
@@ -542,7 +542,7 @@ namespace aneto {
 			}
 
 			/* Get f = value domain */
-			size_t i_minu, i_plus, i_midd;
+			int i_minu, i_plus, i_midd;
 			i_minu = 0;
 			i_plus = m_domain_number;
 
@@ -584,7 +584,7 @@ namespace aneto {
 		 */
 		T root_finder_decreasing(T f_xr, T *func)
 		{
-			size_t dom_value;
+			int dom_value;
 
 			/* Check if value is in a valid range */
 			if (f_xr > func[0]) {
@@ -599,7 +599,7 @@ namespace aneto {
 			}
 
 			/* Get f = value domain */
-			size_t i_minu, i_plus, i_midd;
+			int i_minu, i_plus, i_midd;
 			i_minu = 0;
 			i_plus = m_domain_number;
 
@@ -640,7 +640,7 @@ namespace aneto {
 		 * \param domain  Domain where the function look for the root.
 		 * \return
 		 */
-		T root_finder_general(T f_xr, T *func, size_t domain)
+		T root_finder_general(T f_xr, T *func, int domain)
 		{
 			T X_root = m_lobGrid[0].root_finder(f_xr, get_pointer_dom(func ,domain));
 			return get_xp(domain, X_root);
@@ -727,7 +727,7 @@ namespace aneto {
 		 *                       JAC_OPTION::SPECTRAL respect to the spectral coordinate of the domains.
 		 *
 		 */
-		void comp_derivative_domain(T *func, T *der, size_t dom, JAC_OPTION deriv_option = JAC_OPTION::PHYSICAL)
+		void comp_derivative_domain(T *func, T *der, int dom, JAC_OPTION deriv_option = JAC_OPTION::PHYSICAL)
 		{
 			m_lobGrid[0].compute_1st_der(get_pointer_dom(func, dom), get_pointer_dom(der, dom), deriv_option, \
 					get_pointer_dom(m_main_dxp_dX, dom));
@@ -743,7 +743,7 @@ namespace aneto {
 		 * \param coeffs array for storing the spectral coefficients.
 		 */
 		void get_spectral_coeffs(T *func, T *coeffs) {
-			for (size_t a = 0; a < m_domain_number; a++) {
+			for (int a = 0; a < m_domain_number; a++) {
 				m_lobGrid[0].get_spectral_coeffs(get_pointer_dom(func, a), get_pointer_dom(coeffs, a));
 			}
 		}
@@ -760,7 +760,7 @@ namespace aneto {
 		 *               to stored in a multidomain array, use get_pointer_dom.
 		 * \param dom    Domain where the spectral coefficients will be computed.
 		 */
-		void get_spectral_coeffs(T *func, T *coeffs, size_t dom) {
+		void get_spectral_coeffs(T *func, T *coeffs, int dom) {
 			m_lobGrid[0].get_spectral_coeffs(get_pointer_dom(func, dom), coeffs);
 		}
 
@@ -773,7 +773,7 @@ namespace aneto {
 		 * \param num_thread   index of the spectral_domain required. Need to be less than the number of threads used by the object.
 		 *                   If it is greater it will return
 		 */
-		spectral_domain<T>& get_spectral_domain(size_t num_thread)
+		spectral_domain<T>& get_spectral_domain(int num_thread)
 		{
 			if (num_thread >= m_num_threads) {
 					std::clog << "You are requesting an spectral_domain greater than the number of threads used by the multidomain.\n";
@@ -803,8 +803,8 @@ namespace aneto {
 			}
 			else if (comp_number_threads == 1){
 				m_num_threads = 1;
-				m_dom_beg = new size_t[1];
-				m_dom_end = new size_t[1];
+				m_dom_beg = new int[1];
+				m_dom_end = new int[1];
 				m_dom_beg[0] = 0;
 				m_dom_end[0] = m_domain_number - 1;
 				return;
@@ -818,13 +818,13 @@ namespace aneto {
 
 // 			std::cout << "\nNumber of threads OpenMp  " << threads << std::endl;
 
-			m_dom_beg = new size_t[m_num_threads];
-			m_dom_end = new size_t[m_num_threads];
+			m_dom_beg = new int[m_num_threads];
+			m_dom_end = new int[m_num_threads];
 
-			for (size_t i = 0; i < m_num_threads; i++)
-				m_dom_beg[i] = i * std::ceil( (1.*m_domain_number)/m_num_threads);
+			for (int i = 0; i < m_num_threads; i++)
+				m_dom_beg[i] = i * std::ceil( ((T)m_domain_number)/m_num_threads);
 
-			for (size_t i = 0; i <= (m_num_threads-2); i++)
+			for (int i = 0; i <= (m_num_threads-2); i++)
 				m_dom_end[i] = m_dom_beg[i+1] - 1;
 
 			m_dom_end[m_num_threads - 1] = m_domain_number -1;
@@ -836,7 +836,7 @@ namespace aneto {
 				abort();
 			}
 
-// 			for (size_t i = 0; i < num_threads; i++)
+// 			for (int i = 0; i < num_threads; i++)
 // 				std::cout << i << "  " << dom_beg[i] << "  " << dom_end[i] <<  " " << dom_end[i] - dom_beg[i] + 1  << std::endl;
 
 		}
@@ -849,7 +849,7 @@ namespace aneto {
 
 			m_lobGrid = new spectral_domain<T>[m_num_threads];
 
-			for (size_t i = 0; i < m_num_threads; i++)
+			for (int i = 0; i < m_num_threads; i++)
 				m_lobGrid[i].initialise(m_domain_points);
 
 			m_dom_nodes = new T[m_domain_number + 1];
@@ -863,7 +863,7 @@ namespace aneto {
 
 				m_dualDomain = new spectral_domain<T>[m_num_threads];
 
-			for (size_t i = 0; i < m_num_threads; i++)
+			for (int i = 0; i < m_num_threads; i++)
 				m_dualDomain[i].initialise(m_domain_points);
 			}
 
@@ -881,19 +881,19 @@ namespace aneto {
 			m_dom_nodes[0] = left_bndry;
 			m_dom_nodes[m_domain_number] = right_bndry;
 
-			for (size_t a = 1; a < m_domain_number; a++)
+			for (int a = 1; a < m_domain_number; a++)
 				m_dom_nodes[a] = m_dom_nodes[0] + (m_dom_nodes[m_domain_number] - m_dom_nodes[0]) * a / (T) m_domain_number;
 
 
 			/*----- Construction of the Gauss-Chebyshev-Lobatto Collocation Grid -----*/
-			for (size_t a = 0; a < m_domain_number; a++)
+			for (int a = 0; a < m_domain_number; a++)
 			{
 				m_main_xp[get_id(a, 0)] = m_dom_nodes[a];
 				m_main_xp[get_id(a, m_domain_points)] = m_dom_nodes[a+1];
 
 
 
-				for (size_t k = 1; k < m_domain_points; k++)
+				for (int k = 1; k < m_domain_points; k++)
 					m_main_xp[get_id(a, k)] = m_half * ( (m_dom_nodes[a+1] - m_dom_nodes[a]) * m_lobGrid[0].get_X(k)
 												+ (m_dom_nodes[a+1] + m_dom_nodes[a]) ) ;
 
@@ -902,7 +902,7 @@ namespace aneto {
 			T unif_dxp_dX = m_half * (m_main_xp[get_id(0, m_domain_points)] - m_main_xp[get_id(0, 0)]);
 			T unif_dX_dxp = m_one / unif_dxp_dX;
 
-			for (size_t i = 0; i < m_total_points; i++) {
+			for (int i = 0; i < m_total_points; i++) {
 				m_main_dxp_dX[i] = unif_dxp_dX;
 				m_main_dX_dxp[i] = unif_dX_dxp;
 			}
@@ -914,20 +914,20 @@ namespace aneto {
 			m_dom_nodes[0] = left_bndry;
 			m_dom_nodes[m_domain_number] = right_bndry;
 
-			for (size_t a = 1; a < m_domain_number; a++)
+			for (int a = 1; a < m_domain_number; a++)
 				m_dom_nodes[a] = boundaries[a-1];
 
 			/*----- Construction of the Gauss-Chebyshev-Lobatto Collocation Grid -----*/
-			for (size_t a = 0; a < m_domain_number; a++) {
+			for (int a = 0; a < m_domain_number; a++) {
 				m_main_xp[get_id(a, 0)] = m_dom_nodes[a];
 				m_main_xp[get_id(a, m_domain_points)] = m_dom_nodes[a+1];
 
-				for (size_t k = 1; k < m_domain_points; k++)
+				for (int k = 1; k < m_domain_points; k++)
 					m_main_xp[get_id(a, k)] = m_half * ( (m_dom_nodes[a+1] - m_dom_nodes[a]) * m_lobGrid[0].get_X(k)
 												+ (m_dom_nodes[a+1] + m_dom_nodes[a]) ) ;
 			}
 
-			for (size_t i = 0; i < m_total_points; i++) {
+			for (int i = 0; i < m_total_points; i++) {
 				m_main_dxp_dX[i] = m_half * (m_main_xp[get_id(get_dom(i), m_domain_points)] - m_main_xp[get_id(get_dom(i), 0)]);
 				m_main_dX_dxp[i] = m_one / m_main_dxp_dX[i];
 			}
@@ -939,10 +939,10 @@ namespace aneto {
 		void _set_dual_grid()
 		{
 			T left_bndy_dom, right_bndy_dom;
-			size_t a_dual;
+			int a_dual;
 
 			/*----- Construction of the Gauss-Chebyshev-Lobatto Collocation Grid -----*/
-			for (size_t a = 0; a < (m_domain_number-1); a++)
+			for (int a = 0; a < (m_domain_number-1); a++)
 			{
 				left_bndy_dom  = m_half * (m_dom_nodes[a+0] + m_dom_nodes[a+1]);
 				right_bndy_dom = m_half * (m_dom_nodes[a+1] + m_dom_nodes[a+2]);
@@ -952,7 +952,7 @@ namespace aneto {
 
 
 
-				for (size_t k = 1; k < m_domain_points; k++)
+				for (int k = 1; k < m_domain_points; k++)
 					m_dual_xp[get_id(a, k)] = m_half * ( (right_bndy_dom - left_bndy_dom) * m_lobGrid[0].get_X(k)
 												+ (right_bndy_dom + left_bndy_dom) ) ;
 
@@ -961,13 +961,13 @@ namespace aneto {
 			T unif_dxp_dX = m_half * (m_dual_xp[get_id(0, m_domain_points)] - m_dual_xp[get_id(0, 0)]);
 			T unif_dX_dxp = m_one / unif_dxp_dX;
 
-			for (size_t i = 0; i < m_total_points; i++) {
+			for (int i = 0; i < m_total_points; i++) {
 				m_dual_dxp_dX[i] = unif_dxp_dX;
 				m_dual_dX_dxp[i] = unif_dX_dxp;
 			}
 
-			for (size_t a = 0; a < m_domain_number; a++) {
-				for (size_t j = 0; j <= m_domain_points; j++) {
+			for (int a = 0; a < m_domain_number; a++) {
+				for (int j = 0; j <= m_domain_points; j++) {
 					T x = m_main_xp[get_id(a ,j)];
 					T xl = get_l_bndry(a);
 					T xr = get_r_bndry(a);
@@ -986,7 +986,7 @@ namespace aneto {
 				}
 			}
 
-			for (size_t j = 0; j <= m_domain_points/ 2; j++) {
+			for (int j = 0; j <= m_domain_points/ 2; j++) {
 				m_partit[get_id(0 ,j)] = m_one;
 				m_partit[get_id(m_domain_number -1, m_domain_points - j)] = m_one;
 			}
@@ -1003,7 +1003,7 @@ namespace aneto {
 					m_offset[a] = m_offset[a+1] + integ[get_id(a+1, 0)];
 			}else {
 				m_offset[0] = m_zero;
-				for (size_t a = 1; a < m_domain_number; a++)
+				for (int a = 1; a < m_domain_number; a++)
 					m_offset[a] = m_offset[a-1] + integ[get_id(a-1, m_domain_points)];
 			}
 
@@ -1024,7 +1024,7 @@ namespace aneto {
 		* Returns the number of domains of the dual grid.
 		*
 		*/
-		inline size_t _dual_dom_number() const
+		inline int _dual_dom_number() const
 		{
 			return m_domain_number-1;
 		}
@@ -1032,7 +1032,7 @@ namespace aneto {
 		/* Returns the left boundary of a domain.
 		* \param dom the domain
 		*/
-		inline T _dual_get_l_bndry(size_t dom) const
+		inline T _dual_get_l_bndry(int dom) const
 		{
 			return m_dual_xp[get_id(dom, 0)];
 		}
@@ -1042,7 +1042,7 @@ namespace aneto {
 		* \param dom the domain
 		*
 		*/
-		inline T _dual_get_r_bndry(size_t dom) const
+		inline T _dual_get_r_bndry(int dom) const
 		{
 			return m_dual_xp[get_id(dom, m_domain_points)];
 		}
@@ -1064,20 +1064,20 @@ namespace aneto {
 		}
 
 		inline T _dual_get_X(T x_i) {
-			size_t dom = _dual_get_dom_coord(x_i);
+			int dom = _dual_get_dom_coord(x_i);
 
 			return (m_two * x_i - (_dual_get_l_bndry(dom) + _dual_get_r_bndry(dom)) )/(_dual_get_r_bndry(dom) - _dual_get_l_bndry(dom));
 		}
 
-		inline T _dual_get_xp(size_t dom, T X) {
+		inline T _dual_get_xp(int dom, T X) {
 			return m_half * ((_dual_get_l_bndry(dom) + _dual_get_r_bndry(dom)) + (_dual_get_r_bndry(dom) - _dual_get_l_bndry(dom)) * X);
 		}
 
 
 
-		inline size_t _dual_get_dom_coord(T x_i) const
+		inline int _dual_get_dom_coord(T x_i) const
 		{
-			size_t i_minu, i_plus, i_midd;
+			int i_minu, i_plus, i_midd;
 
 			i_minu = 0;
 			i_plus = m_domain_number - 1;
@@ -1118,7 +1118,7 @@ namespace aneto {
 
 
 			/* Computing partial integrals */
-			for (size_t a = 0; a < m_domain_number; a++)
+			for (int a = 0; a < m_domain_number; a++)
 				m_lobGrid[0].compute_integral(get_pointer_dom(y, a), get_pointer_dom(integ, a), internal_int_opt, m_zero, JAC_OPTION::PHYSICAL, get_pointer_dom(m_main_dxp_dX, a));
 
 			/* Computing offsets */
@@ -1126,17 +1126,17 @@ namespace aneto {
 
 			/* Computing full integrals */
 			if (integ_option == INTEG_OPTION::RIGHT_BC) {
-				for (size_t i = 0; i < m_total_points; i++)
+				for (int i = 0; i < m_total_points; i++)
 					integ[i] = bndry_cond + m_offset[get_dom(i)] + integ[i];
 			}
 			else if (integ_option == INTEG_OPTION::LEFT_BC) {
-				for (size_t i = 0; i < m_total_points; i++)
+				for (int i = 0; i < m_total_points; i++)
 					integ[i] = bndry_cond + m_offset[get_dom(i)] + integ[i];
 			}
 			else if(integ_option == INTEG_OPTION::CUSTOM_BC) {
 				/* Compute bc constant in case CUSTOM_BC */
 				T c_integ = - (interpolate(integ, xp_bc) + m_offset[get_dom_coord(xp_bc)]);
-				for (size_t i = 0; i < m_total_points; i++)
+				for (int i = 0; i < m_total_points; i++)
 					integ[i] = bndry_cond + c_integ + m_offset[get_dom(i)] + integ[i];
 			}
 
@@ -1145,21 +1145,21 @@ namespace aneto {
 		void _comp_derivative_seq(T *func, T *der, JAC_OPTION deriv_option = JAC_OPTION::PHYSICAL)
 		{
 			/* Computing Derivative */
-			for (size_t a = 0; a < m_domain_number; a++)
+			for (int a = 0; a < m_domain_number; a++)
 				m_lobGrid[0].compute_1st_der(get_pointer_dom(func, a), get_pointer_dom(der, a), deriv_option, get_pointer_dom(m_main_dxp_dX, a));
 
 			if (m_der_dual == false)
 				return;
 
 			/* Computing with dual grid */
-			for (size_t a = 0; a < _dual_dom_number(); a++) {
+			for (int a = 0; a < _dual_dom_number(); a++) {
 				/* Interpolate to dual grid */
 				m_lobGrid[0].compute_spectral_func_der(get_pointer_dom(func, a), JAC_OPTION::PHYSICAL, get_pointer_dom(m_main_dxp_dX, a), COEFF_OPTION::F);
-				for (size_t i = 0; i <= m_domain_points/2; i++)
+				for (int i = 0; i <= m_domain_points/2; i++)
 					m_aux1[get_id(a, i)] = m_lobGrid[0].get_fun(get_X(m_dual_xp[get_id(a, i)]));  // idx0 = 0 does not matter when use_spec_stored == true
 
 				m_lobGrid[0].compute_spectral_func_der(get_pointer_dom(func, a+1), JAC_OPTION::PHYSICAL, get_pointer_dom(m_main_dxp_dX, a+1), COEFF_OPTION::F);
-				for (size_t i = m_domain_points/2 + 1; i <= m_domain_points; i++)
+				for (int i = m_domain_points/2 + 1; i <= m_domain_points; i++)
 					m_aux1[get_id(a, i)] = m_lobGrid[0].get_fun(get_X(m_dual_xp[get_id(a, i)]));  // idx0 = 0 does not matter when use_spec_stored == true
 
 				/* Middle point, if even */
@@ -1169,10 +1169,10 @@ namespace aneto {
 				/* Perform derivative */
 				m_dualDomain[0].compute_spectral_func_der(get_pointer_dom(m_aux1, a), JAC_OPTION::PHYSICAL, get_pointer_dom(m_dual_dxp_dX, a), COEFF_OPTION::D1);
 
-				for (size_t i = m_domain_points/2 + 1; i <= m_domain_points; i++)
+				for (int i = m_domain_points/2 + 1; i <= m_domain_points; i++)
 					m_aux2[get_id(a, i)] = m_dualDomain[0].get_der(_dual_get_X(m_main_xp[get_id(a, i)]));
 
-				for (size_t i = 0; i <= m_domain_points/2; i++)
+				for (int i = 0; i <= m_domain_points/2; i++)
 					m_aux2[get_id(a+1, i)] = m_dualDomain[0].get_der(_dual_get_X(m_main_xp[get_id(a+1, i)]));
 
 				// This point is not important because partit = 1.
@@ -1181,7 +1181,7 @@ namespace aneto {
 					m_aux2[get_id(a, m_domain_points/2)] = m_zero;
 			}
 
-			for (size_t i = 0; i < m_total_points; i++)
+			for (int i = 0; i < m_total_points; i++)
 				der[i] = der[i] * m_partit[i] + (m_one - m_partit[i]) * m_aux2[i];
 
 		}
@@ -1208,7 +1208,7 @@ namespace aneto {
 // 				std::cout << stream.str();
 
 				/* Computing partial integrals */
-				for (size_t a = m_dom_beg[idt]; a <= m_dom_end[idt]; a++){
+				for (int a = m_dom_beg[idt]; a <= m_dom_end[idt]; a++){
 // 					Extrae_event(1, a);
 					m_lobGrid[idt].compute_integral(get_pointer_dom(y, a), get_pointer_dom(integ, a), integ_option, m_zero, JAC_OPTION::PHYSICAL, get_pointer_dom(m_main_dxp_dX, a));
 				}
@@ -1234,11 +1234,11 @@ namespace aneto {
 
 				/* Computing full integrals */
 				if (integ_option == INTEG_OPTION::RIGHT_BC) {
-					for (size_t i = get_id(m_dom_beg[idt], 0); i <= get_id(m_dom_end[idt], dom_points()); i++)
+					for (int i = get_id(m_dom_beg[idt], 0); i <= get_id(m_dom_end[idt], dom_points()); i++)
 						integ[i] = bndry_cond + integ[m_total_points-1] + m_offset[m_domain_number - 1] - m_offset[get_dom(i)] - integ[i];
 				}
 				else if (integ_option == INTEG_OPTION::LEFT_BC) {
-					for (size_t i = get_id(m_dom_beg[idt], 0); i <= get_id(m_dom_end[idt], dom_points()); i++) {
+					for (int i = get_id(m_dom_beg[idt], 0); i <= get_id(m_dom_end[idt], dom_points()); i++) {
 // 						Extrae_event(3, i);
 
 						integ[i] = bndry_cond + m_offset[get_dom(i)] + integ[i];
@@ -1247,7 +1247,7 @@ namespace aneto {
 				else if(integ_option == INTEG_OPTION::CUSTOM_BC) {
 					/* Compute bc constant in case CUSTOM_BC */
 					T c_integ = - (interpolate(integ, xp_bc) + m_offset[get_dom_coord(xp_bc)]);
-					for (size_t i = get_id(m_dom_beg[idt], 0); i <= get_id(m_dom_end[idt], dom_points()); i++)
+					for (int i = get_id(m_dom_beg[idt], 0); i <= get_id(m_dom_end[idt], dom_points()); i++)
 						integ[i] = bndry_cond + c_integ + m_offset[get_dom(i)] + integ[i];
 				}
 			}
@@ -1266,12 +1266,12 @@ namespace aneto {
 // 				std::cout << "  #  " << idt << "   \n";
 
 			/* Computing Derivative */
-				for (size_t a = m_dom_beg[idt]; a <= m_dom_end[idt]; a++){
+				for (int a = m_dom_beg[idt]; a <= m_dom_end[idt]; a++){
 					m_lobGrid[idt].compute_1st_der(get_pointer_dom(func, a), get_pointer_dom(der, a) , deriv_option, get_pointer_dom(m_main_dxp_dX, a));
 				}
 //
 // 				#pragma omp for
-// 				for (size_t a = 0; a < domain_number; a++){
+// 				for (int a = 0; a < domain_number; a++){
 // 					lobGrid[idt].compute_1st_der(func, der, deriv_option, main_dxp_dX, get_id(a,0), get_id(a,0));
 // 				}
 

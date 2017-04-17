@@ -107,7 +107,7 @@ namespace aneto {
 		std::vector<std::complex<T>> m_fft_coeffs;
 
 
-		size_t m_spec_points;  	// Number of points of the Lobatto-Chebyshev Grid (N+1);
+		int m_spec_points;  	// Number of points of the Lobatto-Chebyshev Grid (N+1);
 		T *m_X;					// Vector that stores the points of the Lobatto grid: cos( i * PI / points )
 		T *m_norm		;		// Normalisation coeff: two in the boundaries, one in interior points
 		T *m_weight;				// Weight: PI/(points * normalisation)
@@ -143,7 +143,7 @@ namespace aneto {
 		 *                     TRANSF_OPTION::DEFAULT is enable by default.
 		 *
 		 */
-		spectral_domain(size_t po, TRANSF_OPTION transf_op = TRANSF_OPTION::DEFAULT) {
+		spectral_domain(int po, TRANSF_OPTION transf_op = TRANSF_OPTION::DEFAULT) {
 			m_allocated = false;
 			initialise(po, transf_op);
 		}
@@ -168,7 +168,7 @@ namespace aneto {
 		 * \param transf_op    Possible options for the Chebyshev tranformation.
 		 *                     TRANSF_OPTION::DEFAULT is enable by default.
 		 */
-		void initialise(size_t po, TRANSF_OPTION transf_op = TRANSF_OPTION::DEFAULT) {
+		void initialise(int po, TRANSF_OPTION transf_op = TRANSF_OPTION::DEFAULT) {
 
 			if (m_allocated == true) {
 				std::clog << "Error! You are trying to initialise an existing object." << std::endl;
@@ -227,7 +227,7 @@ namespace aneto {
 		 * Notice that according with our convention, the grid
 		 * have N+1 points and this function returns N.
 		*/
-		size_t get_points()
+		int get_points()
 		{
 			return m_spec_points;
 		}
@@ -237,7 +237,7 @@ namespace aneto {
 		 * Be careful! The index is not checked.
 		 * \param k point of the grid.
 		*/
-		T get_X (size_t k)
+		T get_X (int k)
 		{
 			return m_X[k];
 		}
@@ -300,7 +300,7 @@ namespace aneto {
 			T* aux_in;
 
 			if (jac_option == JAC_OPTION::PHYSICAL) {
-				for (size_t k = 0; k <= m_spec_points; k++)
+				for (int k = 0; k <= m_spec_points; k++)
 					m_v_in[k] =  dxp_dX[k] * func[k];
 				aux_in = m_v_in;
 			}
@@ -361,7 +361,7 @@ namespace aneto {
 				return;
 
 			/* For physical derivative, we need to apply the Jacobian */
-			for (size_t k = 0; k <= m_spec_points; k++)
+			for (int k = 0; k <= m_spec_points; k++)
 				der[k] /= dxp_dX[k];
 		}
 
@@ -380,7 +380,7 @@ namespace aneto {
 			_compute_spectral_coeffs(func, m_coeffs_func);
 
 			T interpolated_value = 0;
-			for (size_t k = 0; k <= m_spec_points; k++)
+			for (int k = 0; k <= m_spec_points; k++)
 				interpolated_value += m_coeffs_func[k] * _chebyshev_polynomial(k, X);
 
 			return interpolated_value;
@@ -412,7 +412,7 @@ namespace aneto {
 		{
 			/*----- Interpolation -----*/
 			T interpolated_value = 0;
-			for(size_t k = 0; k <= m_spec_points; k++)
+			for(int k = 0; k <= m_spec_points; k++)
 				interpolated_value += coeffs[k] * _chebyshev_polynomial(k, X);
 
 			return interpolated_value;
@@ -464,7 +464,7 @@ namespace aneto {
 		{
 			/*----- Interpolation -----*/
 			T interpolated_value = m_zero;
-			for(size_t k = 0; k <= m_spec_points; k++)
+			for(int k = 0; k <= m_spec_points; k++)
 				interpolated_value += m_coeffs_func[k] * _chebyshev_polynomial(k, X);
 
 			return interpolated_value;
@@ -481,7 +481,7 @@ namespace aneto {
 		{
 			/*----- Interpolation -----*/
 			T interpolated_value = m_zero;
-			for(size_t k = 0; k <= m_spec_points; k++)
+			for(int k = 0; k <= m_spec_points; k++)
 				interpolated_value += m_coeffs_der[k] * _chebyshev_polynomial(k, X);
 
 			return interpolated_value;
@@ -498,7 +498,7 @@ namespace aneto {
 		{
 			/*----- Interpolation -----*/
 			T interpolated_value = m_zero;
-			for(size_t k = 0; k <= m_spec_points; k++)
+			for(int k = 0; k <= m_spec_points; k++)
 				interpolated_value += m_coeffs_d2[k] * _chebyshev_polynomial(k, X);
 
 			return interpolated_value;
@@ -577,7 +577,7 @@ namespace aneto {
 
 			if (m_transf == TRANSF_OPTION::MATRIX) {
 				m_mat_transf = new T *[m_spec_points+1];
-				for(size_t i = 0; i <= m_spec_points; ++i)
+				for(int i = 0; i <= m_spec_points; ++i)
 					m_mat_transf[i] = new T[m_spec_points+1];
 			}
 			else {
@@ -604,7 +604,7 @@ namespace aneto {
 			delete [] m_norm;
 
 			if (m_transf == TRANSF_OPTION::MATRIX) {
-				for(size_t i = 0; i <= m_spec_points; ++i)
+				for(int i = 0; i <= m_spec_points; ++i)
 					delete [] m_mat_transf[i];
 				delete [] m_mat_transf;
 			}
@@ -624,7 +624,7 @@ namespace aneto {
 		}
 
 
-		T _chebyshev_polynomial(size_t k, T X)
+		T _chebyshev_polynomial(int k, T X)
 		{
 			return cos((T)k * acos(X));
 		}
@@ -637,8 +637,8 @@ namespace aneto {
 			if (m_transf != TRANSF_OPTION::MATRIX)
 				return;
 
-			for (size_t i = 0; i <= m_spec_points;  i++)
-				for (size_t j = 0; j <= m_spec_points;  j++)
+			for (int i = 0; i <= m_spec_points;  i++)
+				for (int j = 0; j <= m_spec_points;  j++)
 					m_mat_transf[i][j]    =  cos((T)(i*j) * m_pi/(T)m_spec_points)* m_two /m_norm[j]/m_spec_points;
 		}
 
@@ -650,26 +650,26 @@ namespace aneto {
 			}
 
 			m_X[0]      = - m_one;
-			m_X[m_spec_points] = + m_one;
+			m_X[m_spec_points] = m_one;
 			m_norm[0]   = m_two;
 			m_norm[m_spec_points] = m_two;
 			m_weight[0]   = m_pi / ((T)m_spec_points * m_norm[0]);
 			m_weight[m_spec_points] = m_weight[0];
 
 
-			for (size_t k = 1; k <= (m_spec_points-1)/2; k++)
+			for (int k = 1; k <= (m_spec_points-1)/2; k++)
 			{
 				m_X[k] = - cos((T) k * m_pi/(T)m_spec_points);
 				m_X[m_spec_points - k] = - m_X[k];
 			}
 
 			if (m_spec_points%2 == 0)
-				m_X[m_spec_points/2] = 0;
+				m_X[m_spec_points/2] = 0.000;
 
 
 			T w = m_pi / ((T)m_spec_points);
 
-			for (size_t k = 1; k < m_spec_points; k++) {
+			for (int k = 1; k < m_spec_points; k++) {
 				m_norm[k] = m_one;
 				m_weight[k] = w;
 			}
@@ -683,7 +683,7 @@ namespace aneto {
 			cheb_transf(in, m_v_out);
 
 			/**----- Computing the spectral coefficients, {GF_a_spectral[J,A]_n} -----**/
-			for (size_t n = 0; n <= m_spec_points; n++){
+			for (int n = 0; n <= m_spec_points; n++){
 				if ( (n % 2) == 0 )
 					coeffs[n] =  m_v_out[n]/(d_N * m_norm[n]);
 				else
@@ -702,12 +702,12 @@ namespace aneto {
 
 			m_v_in[m_spec_points] = - (coeff * m_v_out[m_spec_points - 1])/dN;
 
-			for (size_t k = 1; k < m_spec_points; k++)
+			for (int k = 1; k < m_spec_points; k++)
 				m_v_in[k] = m_half * coeff * (m_v_out[k+1]/(m_norm[k+1]) - m_v_out[k-1])/((T) k);
 
 			m_v_in[0] = m_zero;
 
-			for (size_t n = 1; n <= m_spec_points; n++) {
+			for (int n = 1; n <= m_spec_points; n++) {
 				m_v_in[0] += m_v_in[n];
 			}
 
@@ -729,18 +729,18 @@ namespace aneto {
 
 			m_v_in[m_spec_points] = - (coeff * m_v_out[m_spec_points - 1])/dN;
 
-			for (size_t k = 1; k < m_spec_points; k++)
+			for (int k = 1; k < m_spec_points; k++)
 				m_v_in[k] = m_half * coeff * (m_v_out[k+1]/(m_norm[k+1]) - m_v_out[k-1])/((T) k);
 
 			m_v_in[0] = m_zero;
-			for (size_t n = 1; n <= m_spec_points; n++) {
+			for (int n = 1; n <= m_spec_points; n++) {
 				m_v_in[0] += m_v_in[n] * (n%2==0?m_one:-m_one);
 			}
 			m_v_in[0] = right_bndry_cond - m_v_in[0] * m_two;
 
 			cheb_transf(m_v_in, m_v_out);
 
-			for (size_t k = 0; k <= m_spec_points; k++)
+			for (int k = 0; k <= m_spec_points; k++)
 				Integ[k] = -m_v_out[k];
 
 			Integ[m_spec_points] = right_bndry_cond;
@@ -751,9 +751,9 @@ namespace aneto {
 		{
 			T sum = m_zero;
 
-			for (size_t i = 0; i <= m_spec_points;  i++) {
+			for (int i = 0; i <= m_spec_points;  i++) {
 				sum = m_zero;
-				for (size_t j = 0; j <= m_spec_points;  j++)
+				for (int j = 0; j <= m_spec_points;  j++)
 					sum += m_mat_transf[i][j] * in[j];
 				out[i] = sum * (T)m_spec_points;
 			}
@@ -761,14 +761,14 @@ namespace aneto {
 
 		void _fft_transf(T *in, T *out)
 		{
-			for (size_t k = 0; k <= m_spec_points; k++)
+			for (int k = 0; k <= m_spec_points; k++)
 				m_fft_func[k] = in[k];
-			for (size_t k = m_spec_points+1; k < 2*m_spec_points; k++)
+			for (int k = m_spec_points+1; k < 2*m_spec_points; k++)
 				m_fft_func[k] = in[2*m_spec_points - k];
 
 			m_fft.fwd(m_fft_coeffs, m_fft_func);
 
-			for (size_t i= 0; i <= m_spec_points; i++)
+			for (int i= 0; i <= m_spec_points; i++)
 				out[i] = m_fft_coeffs[i].real();
 
 		}
