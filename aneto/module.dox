@@ -23,6 +23,12 @@
  * A paper with a basic review of PSC methods and showing some of the possibilities
  * of the library will be published soon.
  *
+ * For comments, questions or suggestions about new functionalities, the user can
+ * contact anetolib@gmail.com
+ *
+ * The authors thank Lluis Guesa and Víctor Martín at ICE (IEEC-CSIC) for suggestions
+ * and improvements in the code of the library.
+ *
  * \section lib_use Using the Library
  * All the functionalities of this library are implemented as template classes in the
  * header files included in the folder \b aneto/ so in order to be used in
