@@ -127,12 +127,6 @@ int multidom_integral_LR(bool verbose, size_t spec_domains = 14, size_t spec_poi
 	print_sep_line(verbose, std::clog);
 	if (verbose) std::clog << std::endl << std::endl;
 
-
-	std::clog << "WARNING!! ERASE!!!" << std::endl;
-	mpfr::mpreal::set_default_prec(300);
-        integral_comparison<mpfr::mpreal>(verbose, spec_domains, spec_points, "int_multidom_left.dat");
-
-
 	return ERROR;
 
 }
