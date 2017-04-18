@@ -26,7 +26,7 @@ of the library will be published soon.
 For comments, questions or suggestions about new functionalities, the user can
 contact anetolib@gmail.com
 
-The authors thank Lluís Gesa and Víctor Martín for suggestions and
-improvements in the code of the library.
+The authors thank [Lluís Gesa](https://github.com/Hlod-Wig) and Víctor Martín 
+for suggestions and improvements in the code of the library.
 
 
